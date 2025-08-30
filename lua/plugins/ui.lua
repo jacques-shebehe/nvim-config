@@ -193,7 +193,7 @@ return {
   { -- statusline
     -- PERF: I found this to slow down the editor
     'nvim-lualine/lualine.nvim',
-    enabled = false,
+    enabled = true,
     config = function()
       local function macro_recording()
         local reg = vim.fn.reg_recording()
@@ -206,8 +206,10 @@ return {
       ---@diagnostic disable-next-line: undefined-field
       require('lualine').setup {
         options = {
-          section_separators = '',
-          component_separators = '',
+          thene = 'oscura',
+          icon_enabled = true,
+				section_separators = { left = "", right = "" },
+          component_separators = '|',
           globalstatus = true,
         },
         sections = {
@@ -222,6 +224,7 @@ return {
         extensions = { 'nvim-tree' },
       }
     end,
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
   },
 
   { -- nicer-looking tabs with close icons

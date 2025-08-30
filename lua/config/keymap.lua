@@ -45,6 +45,23 @@ nmap('<S-Down>', '<cmd>resize -2<CR>')
 nmap('<S-Left>', '<cmd>vertical resize -2<CR>')
 nmap('<S-Right>', '<cmd>vertical resize +2<CR>')
 
+-- Additional keymaps adopted from nvim-lewis configuration (non-conflicting)
+-- Buffer navigation
+nmap('<leader>bn', '<Cmd>bnext<CR>', 'Next buffer')
+nmap('<leader>bp', '<Cmd>bprevious<CR>', 'Previous buffer')
+-- Window splits
+nmap('<leader>sv', '<Cmd>vsplit<CR>', 'Split window vertically')
+nmap('<leader>sh', '<Cmd>split<CR>', 'Split window horizontally')
+-- Window resizing with Ctrl + arrows (complements Shift-arrow mappings above)
+nmap('<C-Up>', '<Cmd>resize +2<CR>', 'Increase window height')
+nmap('<C-Down>', '<Cmd>resize -2<CR>', 'Decrease window height')
+nmap('<C-Left>', '<Cmd>vertical resize -2<CR>', 'Decrease window width')
+nmap('<C-Right>', '<Cmd>vertical resize +2<CR>', 'Increase window width')
+-- Line joining that keeps cursor position
+nmap('J', 'mzJ`z', 'Join lines and keep cursor position')
+-- Quick config edit
+nmap('<leader>rc', '<Cmd>e ~/.config/nvim/init.lua<CR>', 'Edit config')
+
 -- Add undo break-points
 imap(',', ',<c-g>u')
 imap('.', '.<c-g>u')

@@ -41,14 +41,17 @@ return {
     config = function()
       ---@diagnostic disable-next-line: missing-fields
       require('obsidian').setup {
-        ui = {
-          checkboxes = { [' '] = {}, ['x'] = {} },
+        legacy_commands = false,
+        checkboxes = {
+          [" "] = { char = " ", hl_group = "ObsidianTodo" },
+          ["x"] = { char = "x", hl_group = "ObsidianDone" },
+          order = { " ", "x" },
           enable = false,
         },
         workspaces = {
           {
             name = 'notes',
-            path = '~/notes',
+            path = '~/Library/CloudStorage/OneDrive-Örebrouniversitet/SCTO-Obsidian',
           },
         },
         -- Optional, for templates (see below).
