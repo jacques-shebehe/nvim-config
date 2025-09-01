@@ -1,3 +1,8 @@
+-- Only needed on Windows; Macs usually have SQLite in the default search path
+if vim.fn.has("win32") == 1 or vim.fn.has("win64") == 1 then
+  -- \\ in Lua strings → \ on disk
+  vim.g.sqlite_clib_path = "C:\\ProgramData\\chocolatey\\lib\\sqlite\\tools\\sqlite3.dll"
+end
 -- Settings for vscode-neovim
 if vim.g.vscode then
 --   -- Set <space> as the leader key

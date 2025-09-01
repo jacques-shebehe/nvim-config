@@ -44,3 +44,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 -- 		vim.lsp.buf.format({ name = "efm", async = true })
 -- 	end,
 -- })
+-- fyle type to .tmpl files
+vim.api.nvim_create_autocmd({'BufRead', 'BufNewFile'}, {
+  pattern = {'*.tmpl'},
+  callback = function(args)
+    local fname = vim.fn.fnamemodify(args.file, ':t')
+    local match = fname:match('.*%.([a-zA-Z0-9_-]+)%.tmpl$')
+    if match then
+      vim.bo.filetype = match
+    end
+  end,
+})
