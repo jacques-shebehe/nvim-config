@@ -172,6 +172,8 @@ return {
 
   { -- edit the file system as a buffer
     'stevearc/oil.nvim',
+    enabled = true,
+    lazy = false,
     opts = {
       keymaps = {
         ['<C-s>'] = false,
@@ -181,7 +183,24 @@ return {
       view_options = {
         show_hidden = true,
       },
+      win_options = {
+        -- Show the current directory with $HOME replaced by '~' and make it bold
+        winbar = '%#Bold#%{v:lua._G.oil_home_path()}',
+      },
     },
+    config = function(_, opts)
+      -- Global helper to return the path with $HOME replaced by '~'
+      _G.oil_home_path = function()
+        local dir = require('oil').get_current_dir()
+        if not dir then
+          return ''
+        end
+        dir = dir:gsub(vim.fn.getenv 'HOME', '~')
+        return dir
+      end
+
+      require('oil').setup(opts)
+    end,
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     keys = {
       { '-', ':Oil<cr>', desc = 'oil' },
@@ -208,7 +227,7 @@ return {
         options = {
           thene = 'oscura',
           icon_enabled = true,
-				section_separators = { left = "", right = "" },
+          section_separators = { left = '', right = '' },
           component_separators = '|',
           globalstatus = true,
         },
@@ -374,7 +393,7 @@ return {
     'MeanderingProgrammer/render-markdown.nvim',
     enabled = true,
     -- ft = {'quarto', 'markdown'},
-    ft = { 'markdown'},
+    ft = { 'markdown' },
     -- dependencies = { 'nvim-treesitter/nvim-treesitter' },
     -- dependencies = { 'nvim-treesitter/nvim-treesitter', 'echasnovski/mini.icons' }, -- if you use standalone mini plugins
     dependencies = { 'nvim-treesitter/nvim-treesitter', 'nvim-tree/nvim-web-devicons' }, -- if you prefer nvim-web-devicons
@@ -396,7 +415,7 @@ return {
         style = 'full',
         border = 'thin',
         sign = false,
-        render_modes = { 'i', 'v', 'V' }
+        render_modes = { 'i', 'v', 'V' },
       },
       signs = {
         enabled = false,
@@ -435,7 +454,7 @@ return {
           markdown = {
             enabled = true,
             only_render_image_at_cursor = true,
-            only_render_image_at_cursor_mode = "popup",
+            only_render_image_at_cursor_mode = 'popup',
             filetypes = { 'markdown', 'vimwiki', 'quarto' },
           },
         },

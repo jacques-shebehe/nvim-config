@@ -21,7 +21,7 @@ vim.opt.mouse = 'a' -- enable mouse
 vim.opt.mousefocus = true
 vim.opt.clipboard:append 'unnamedplus' -- use system clipboard
 
-vim.opt.timeoutlen = 2000-- until which-key pops up
+vim.opt.timeoutlen = 2000 -- until which-key pops up
 vim.opt.updatetime = 250 -- for autocommands and hovers
 
 -- don't ask about existing swap files
@@ -42,7 +42,6 @@ vim.g.maplocalleader = ' '
 
 --  change <ESC> with j-j
 vim.keymap.set('i', 'jj', '<Esc>', { desc = 'From I mode to N mode' })
-
 
 -- smarter search
 vim.opt.ignorecase = true
@@ -142,7 +141,6 @@ vim.filetype.add {
 -- filter quickfix list with Cfilter
 vim.cmd.packadd 'cfilter'
 
-
 -- -- ================================================================================================
 -- -- TITLE : NeoVim options
 -- -- ABOUT : basic settings native to neovim
@@ -196,7 +194,7 @@ vim.cmd.packadd 'cfilter'
 -- vim.opt.backup = false -- Don't create backup files
 -- vim.opt.writebackup = false -- Don't backup before overwriting
 -- vim.opt.swapfile = false -- Don't create swap files
--- vim.opt.undofile = true -- Persistent undo
+vim.opt.undofile = true -- Persistent undo
 -- vim.opt.updatetime = 300 -- Time in ms to trigger CursorHold
 -- vim.opt.timeoutlen = 500 -- Time in ms to wait for mapped sequence
 -- vim.opt.ttimeoutlen = 0 -- No wait for key code sequences
