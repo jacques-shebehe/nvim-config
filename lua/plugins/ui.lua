@@ -179,6 +179,8 @@ return {
         ['<C-s>'] = false,
         ['<C-h>'] = false,
         ['<C-l>'] = false,
+        ['sh'] = 'actions.select_split',
+        ['sv'] = 'actions.select_vsplit',
       },
       view_options = {
         show_hidden = true,

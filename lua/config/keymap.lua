@@ -25,7 +25,11 @@ end
 
 -- select last paste
 nmap('gV', '`[v`]')
-
+-- Move between Buffers with Tab and Shift-Tab
+nmap('<Tab>', ':bnext<CR>')
+nmap('<S-Tab>', ':bprevious<CR>')
+nmap('<leader>x', ':bdelete!<CR>') -- close buffer
+nmap('<leader>b', '<cmd> enew <CR>') -- new buffer
 -- move in command line
 cmap('<C-a>', '<Home>')
 
@@ -356,8 +360,9 @@ wk.add({
     -- { '<leader>e', group = '[e]dit' },
     -- { '<leader>e', group = '[t]mux' },
     -- replace the two dummy `<leader>e` lines with ONE real mapping
-    { '<leader>e', '<cmd>Oil<cr>',        desc = 'toggle file [e]xplorer (Oil)' },
+    { '<leader>e', '<cmd>Oil<cr>', desc = 'toggle file [e]xplorer (Oil)' },
     { '<leader>m', '<cmd>Oil --float<cr>', desc = 'focus explorer ([m]aximise Oil)' },
+    -- { '<leader>e', '<cmd>Neotree toggle<cr>', desc = 'toggle file [e]xplorer (Oil)' },
     { '<leader>fd', [[eval "$(tmux showenv -s DISPLAY)"]], desc = '[d]isplay fix' },
     { '<leader>f', group = '[f]ind (telescope)' },
     { '<leader>f<space>', '<cmd>Telescope buffers<cr>', desc = '[ ] buffers' },
