@@ -1,148 +1,165 @@
--- Only needed on Windows; Macs usually have SQLite in the default search path
+-- <leader> key
+vim.g.mapleader = ' '
+
 if vim.fn.has 'win32' == 1 or vim.fn.has 'win64' == 1 then
   -- \\ in Lua strings → \ on disk
   vim.g.sqlite_clib_path = 'C:\\ProgramData\\chocolatey\\lib\\sqlite\\tools\\sqlite3.dll'
 end
--- Settings for vscode-neovim
+-- open config
+vim.cmd 'nmap <leader>oi :e ~/AppData/Local/nvim/init.lua<cr>'
+
+-- save
+vim.cmd 'nmap <leader>s :w<cr>'
+
+-- paste without overwriting
+
+-- clear search highlighting
+-- vim.keymap.set('n', '<Esc>', ':nohlsearch<cr>')
+vim.keymap.set('n', '<esc>', '<cmd>nohlsearch<cr>')
+-- save & source current file
+vim.keymap.set(
+  'n',
+  '<leader>%',
+  '<Cmd>w | source %<CR>',
+  { desc = 'Save & source current file', noremap = true, silent = true }
+)
+-- skip folds (down, up)
+
+-- sync system clipboard
+vim.opt.clipboard = 'unnamedplus'
+
+-- search ignoring case
+vim.opt.ignorecase = true
+
+-- disable "ignorecase" option if the search pattern contains upper case characters
+vim.opt.smartcase = true
+
+--  change <ESC> with j-j
+vim.keymap.set('i', 'jj', '<Esc>', { desc = 'From I mode to N mode' })
+
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.breakindent = true
+vim.opt.ignorecase = true
+
+vim.opt.smartcase = true
+vim.opt.list = true
+vim.opt.listchars = { tab = '>>', trail = '.', nbsp = '␣' }
+vim.opt.inccommand = 'split'
+vim.opt.cursorline = true
+vim.opt.scrolloff = 10
+
 if vim.g.vscode then
-  --   -- Set <space> as the leader key
-  --   -- See `:help mapleader`
-  --   --  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
-  vim.g.mapleader = ' '
-
-  vim.g.maplocalleader = ' '
-
-  -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = true
-
-  -- Make line numbers default
-  vim.opt.number = true
-  -- You can also add relative line numbers, to help with jumping.
-  --  Experiment for yourself to see if you like it!
-  vim.opt.relativenumber = true
-  --
-
-  -- Enable mouse mode, can be useful for resizing splits for example!
-  vim.opt.mouse = 'a'
-  --
-  --   -- Don't show the mode, since it's already in the status line
-  --   vim.opt.showmode = false
-  --
-  --   -- Sync clipboard between OS and Neovim.
-  --   --  Schedule the setting after `UiEnter` because it can increase startup-time.
-  --   --  Remove this option if you want your OS clipboard to remain independent.
-  --   --  See `:help 'clipboard'`
-  --   vim.schedule(function()
-  --     vim.opt.clipboard = 'unnamedplus'
-  --   end)
-  --
-  --   -- Enable break indent
-  --   vim.opt.breakindent = true
-  --
-  --   -- Save undo history
-  --   vim.opt.undofile = true
-  --
-  --   -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-  --   vim.opt.ignorecase = true
-  --   vim.opt.smartcase = true
-  --
-  --   -- Keep signcolumn on by default
-  --   vim.opt.signcolumn = 'yes'
-  --
-  --   -- Preview substitutions live, as you type!
-  --   vim.opt.inccommand = 'split'
-  --   -- Show which line your cursor is on
-  --   vim.opt.cursorline = true
-  --
-  --   -- Minimal number of screen lines to keep above and below the cursor.
-  --   vim.opt.scrolloff = 10
-  --
-  --   -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
-  --   -- instead raise a dialog asking if you wish to save the current file(s)
-  --   -- See `:help 'confirm'`
-  --   vim.opt.confirm = true
-
-  -- Clear highlights on search when pressing <Esc> in normal mode
-  --  See `:help hlsearch`
-  vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
-  -- Highlight when yanking (copying) text
-  --  Try it with `yap` in normal mode
-  --  See `:help vim.highlight.on_yank()`
+  --  See `:help vim.hl.on_yank()`
   vim.api.nvim_create_autocmd('TextYankPost', {
     desc = 'Highlight when yanking (copying) text',
     group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
     callback = function()
-      vim.highlight.on_yank()
+      vim.hl.on_yank()
     end,
   })
+  -- Move selected lines down in visual modes
+  vim.keymap.set('x', 'J', ":move '>+1<CR>gv=gv", { desc = 'Move lines down', silent = true })
 
+  -- Move selected lines up in visual modes
+  vim.keymap.set('x', 'K', ":move '<-2<CR>gv=gv", { desc = 'Move lines up', silent = true })
+
+  local opts = { noremap = true, silent = true }
+
+  local mappings = {
+    -- Word Navigation
+
+    -- Code Navigation
+
+    -- Quick Search & Peek Actions
+
+    -- Line Editing & Code Maintenance
+
+    -- File & Workspace Management
+    { 'n', '<leader>rw', 'workbench.action.reloadWindow' },
+    { 'n', '<leader>os', 'workbench.action.openSettingsJson' },
+    { 'n', '<leader>ok', 'workbench.action.openGlobalKeybindingsFile' },
+    -- open file ib currebt project
+    { 'n', '<leader>ff', 'workbench.action.quickOpen' },
+    -- open recent projects
+    { 'n', '<leader>fF', 'workbench.action.openRecent' },
+    -- create new file
+    -- { 'n', '<leader>fa', 'workbench.action.files.newUntitledFile' },
+    { 'n', '<leader>fa', 'fileutils.newFileAtRoot' },
+    -- clode active file and all files
+    { 'n', '<leader>fx', 'workbench.action.closeActiveEditor' },
+    { 'n', '<leader>bd', 'workbench.action.closeActiveEditor' },
+    { 'n', '<leader>fq', 'workbench.action.closeAllEditors' },
+    { 'n', '<leader>bD', 'workbench.action.closeEditorsInOtherGroups' },
+    -- search & replace in current file
+    { 'n', '<leader>fg', 'actions.find' },
+    { 'n', '<leader>fr', 'editor.action.startFindReplaceAction' },
+    -- search and replace globally
+    { 'n', '<leader>fG', 'workbench.action.findInFiles' },
+    { 'n', '<leader>fR', 'workbench.action.replaceInFiles' },
+    -- copy current lines
+    { 'n', '<leader>yp', 'editor.action.copyLinesDownAction' },
+    { 'n', '<leader>yP', 'editor.action.copyLinesUpAction' },
+    -- move current lines
+    { 'n', '<leader>dp', 'editor.action.moveLinesDownAction' },
+    { 'n', '<leader>dP', 'editor.action.moveLinesUpAction' },
+    -- apply code/language formatting
+    { 'n', '<leader>cf', 'editor.action.formatDocument' },
+    { 'n', '<leader>cF', 'editor.action.formatSelection' },
+    -- move to nexrt/previous error or warning
+    { 'n', '<leader>en', 'editor.action.marker.next' },
+    { 'n', '<leader>ep', 'editor.action.marker.prev' },
+
+    -- Navigation
+    { 'n', 'Ctrl+h', 'workbench.action.navigateLeft' },
+    { 'n', 'Ctrl+l', 'workbench.action.navigateRight' },
+    { 'n', 'Ctrl+k', 'workbench.action.navigateUp' },
+    { 'n', 'Ctrl+j', 'workbench.action.navigateDown' },
+    -- toggle file explorer
+    { 'n', '<leader>e', 'workbench.view.explorer' },
+    { 'n', '<leader>e', 'workbench.explorer.fileView.focus' },
+    -- toggleTerminal
+    { 'n', '<leader>tt', 'workbench.action.terminal.toggleTerminal' },
+    { 'n', '<leader>tc', 'workbench.panel.positronConsole.focus' },
+
+    -- Window Management
+    { 'n', '<leader>sh', 'workbench.action.splitEditor' },
+    { 'n', '<leader>sv', 'workbench.action.splitEditorDown' },
+    { 'n', '<leader>sj', 'workbench.action.joinTwoGroups' },
+    -- equalize window sizes
+    { 'n', '<leader>se', 'workbench.action.evenEditorWidths' },
+    -- { 'n', '<leader>wa', 'workbench.action.evenEditorWidths' },
+    -- quarto preview
+    { 'n', '<leader>qp', 'quarto.preview' }, -- Ctrl+Shift+N
+    { 'n', '<leader>qc', 'quarto.runCurrentCell' }, -- Ctrl+Shift+Enter
+    { 'n', '<leader>qn', 'quarto.runNextCell' }, -- Ctrl+Alt+N
+    { 'n', '<leader>qp', 'quarto.runPreviousCell' }, -- Ctrl+Alt+P
+    { 'n', '<leader>qP', 'quarto.runCellsAbove' }, -- Ctrl+Shift+Alt+P
+    { 'n', '<leader>qN', 'quarto.runCellsBelow' }, -- Ctrl+Shift+Alt+N
+    { 'n', '<leader>qA', 'quarto.runAllCells' }, -- Ctrl+Alt+R
+    { 'n', '<leader>qr', 'quarto.renderDocument' },
+  }
+
+  for _, mapping in ipairs(mappings) do
+    local mode, key, command = mapping[1], mapping[2], mapping[3]
+    vim.keymap.set(mode, key, function()
+      vim.fn.VSCodeNotify(command)
+    end, opts)
+  end
+  -- Bootstrap lazy.nvim
   require 'config.lazy-bootstrap'
-  -- -- [[ Install `lazy.nvim` plugin manager ]]
-  -- --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
-  -- local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
-  -- if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  --   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  --   local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
-  --   if vim.v.shell_error ~= 0 then
-  --     error('Error cloning lazy.nvim:\n' .. out)
-  --   end
-  -- end
-  --
-  -- ---@type vim.Option
-  -- local rtp = vim.opt.rtp
-  -- rtp:prepend(lazypath)
-  --
-  --   -- Now that lazy.nvim path has been prepended by bootstrap.lua,
-  --   -- require lazy safely and call setup
-  --
-  --   -- Now require lazy safely
-  --   local ok, lazy = pcall(require, 'lazy')
-  --   if not ok then
-  --     vim.notify('Failed to load lazy.nvim', vim.log.levels.ERROR)
-  --     return
-  --   end
-  --   -- Set up plugins via lazy.nvim
-  --   lazy.setup {
-  --     {
-  --       'echasnovski/mini.nvim',
-  --       version = false,
-  --       config = function()
-  --         -- Better Around/Inside textobjects
-  --         --
-  --         -- Examples:
-  --         --  - va)  - [V]isually select [A]round [)]paren
-  --         --  - yinq - [Y]ank [I]nside [N]ext [Q]uote
-  --         --  - ci'  - [C]hange [I]nside [']quote
-  --         require('mini.ai').setup { n_lines = 500 }
-  --
-  --         -- Add/delete/replace surroundings (brackets, quotes, etc.)
-  --         -- - saiw) - [S]urround [A]dd [I]nner [W]ord [)]Paren
-  --         -- - sd'   - [S]urround [D]elete [']quotes
-  --         -- - sr)'  - [S]urround [R]eplace [)] [']
-  --         require('mini.surround').setup()
-  --         -- add pairs of "'{[ automatically
-  --         require('mini.pairs').setup()
-  --         -- comment (language-specific) lines in normal or visual mode
-  --         require('mini.comment').setup()
-  --         -- gcc - comment a line (visual block) or uncomment commented line (visual block)
-  --       end,
-  --     },
-  --   }
   -- load ONLY the mini-suite (the table returned by lua/plugins/mini.lua)
   -- local mini_spec = require('plugins.mini') -- if only this plugin
   local mini_spec = {
     require 'plugins.mini', -- existing Mini suite
     require 'plugins.vim-visual-multi', -- new plugin added via require
     -- more plugins? just keep adding require('plugins.xxx')
+    require 'plugins.flash',
   }
-
   require('lazy').setup(mini_spec, {
     root = vim.fn.stdpath 'data' .. '/lazy-vscode', -- separate install dir
     defaults = { version = false }, -- same defaults as desktop
   })
-
-  return
 --   -- below is common quarto nvim-config
 else
   -- NOTE: Throughout this config, some plugins are

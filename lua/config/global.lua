@@ -116,7 +116,7 @@ vim.api.nvim_create_autocmd({ 'BufEnter' }, {
 })
 
 -- scroll before end of window
-vim.opt.scrolloff = 5
+vim.opt.scrolloff = 15
 
 -- (don't == 0) replace certain elements with prettier ones
 vim.opt.conceallevel = DefaultConcealLevel
