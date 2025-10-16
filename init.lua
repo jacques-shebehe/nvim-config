@@ -48,16 +48,39 @@ vim.opt.listchars = { tab = '>>', trail = '.', nbsp = '␣' }
 vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
+-- set vim-visual-muti to add vertical cursors
+vim.g.VM_defaults_mappings = 1
+vim.g.VM_maps = {
+  ['Select All'] = '<leader>a',
+  ['Visual All'] = '<leader>a',
+  ['Align'] = '<leader>A',
+  -- ['Find Under'] = '<C-n>',
+  ['Add Cursor Down'] = '<C-Down>',
+  ['Add Cursor Up'] = '<C-Up>',
+  -- ['Add Cursor Down'] = '<A-j>', -- example: Alt-j instead of <C-Down>
+  -- ['Add Cursor Up'] = '<A-k>', -- example: Alt-k instead of <C-Up>
+}
 
 if vim.g.vscode then
   --  See `:help vim.hl.on_yank()`
-  vim.api.nvim_create_autocmd('TextYankPost', {
-    desc = 'Highlight when yanking (copying) text',
-    group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
-    callback = function()
-      vim.hl.on_yank()
-    end,
-  })
+
+-- Define your custom yank highlight group
+vim.api.nvim_set_hl(0, "YankHighlight", { bg = "#dfafdd", fg = "#0b0b0f" })
+
+-- Apply the highlight on yank using the custom group
+vim.api.nvim_create_autocmd("TextYankPost", {
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank({ higroup = "YankHighlight", timeout = 300 })
+  end,
+})
+  -- vim.api.nvim_create_autocmd('TextYankPost', {
+  --   desc = 'Highlight when yanking (copying) text',
+  --   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
+  --   callback = function()
+  --     vim.hl.on_yank()
+  --   end,
+  -- })
   -- Move selected lines down in visual modes
   vim.keymap.set('x', 'J', ":move '>+1<CR>gv=gv", { desc = 'Move lines down', silent = true })
 
@@ -79,17 +102,25 @@ if vim.g.vscode then
     { 'n', '<leader>rw', 'workbench.action.reloadWindow' },
     { 'n', '<leader>os', 'workbench.action.openSettingsJson' },
     { 'n', '<leader>ok', 'workbench.action.openGlobalKeybindingsFile' },
+    -- toggle developer tools
+    { 'n', '<leader>od', 'workbench.action.toggleDevTools' },
+    -- open extensions view
+    { 'n', '<leader>ox', 'workbench.view.extensions' },
+    -- copy file path to clipboard
+    { 'n', '<leader>cp', 'copyRelativeFilePath' },
+
     -- open file ib currebt project
     { 'n', '<leader>ff', 'workbench.action.quickOpen' },
     -- open recent projects
     { 'n', '<leader>fF', 'workbench.action.openRecent' },
     -- create new file
-    -- { 'n', '<leader>fa', 'workbench.action.files.newUntitledFile' },
-    { 'n', '<leader>fa', 'fileutils.newFileAtRoot' },
+    { 'n', '<leader>fa', 'workbench.action.files.newUntitledFile' },
+    -- { 'n', '<leader>fa', 'fileutils.newFileAtRoot' },
     -- clode active file and all files
     { 'n', '<leader>fx', 'workbench.action.closeActiveEditor' },
     { 'n', '<leader>bd', 'workbench.action.closeActiveEditor' },
     { 'n', '<leader>fq', 'workbench.action.closeAllEditors' },
+    { 'n', '<leader>dq', 'workbench.action.closeAllEditors' },
     { 'n', '<leader>bD', 'workbench.action.closeEditorsInOtherGroups' },
     -- search & replace in current file
     { 'n', '<leader>fg', 'actions.find' },
@@ -120,6 +151,7 @@ if vim.g.vscode then
     { 'n', '<leader>e', 'workbench.explorer.fileView.focus' },
     -- toggleTerminal
     { 'n', '<leader>tt', 'workbench.action.terminal.toggleTerminal' },
+
     { 'n', '<leader>tc', 'workbench.panel.positronConsole.focus' },
 
     -- Window Management
@@ -130,14 +162,14 @@ if vim.g.vscode then
     { 'n', '<leader>se', 'workbench.action.evenEditorWidths' },
     -- { 'n', '<leader>wa', 'workbench.action.evenEditorWidths' },
     -- quarto preview
-    { 'n', '<leader>qp', 'quarto.preview' }, -- Ctrl+Shift+N
-    { 'n', '<leader>qc', 'quarto.runCurrentCell' }, -- Ctrl+Shift+Enter
-    { 'n', '<leader>qn', 'quarto.runNextCell' }, -- Ctrl+Alt+N
-    { 'n', '<leader>qp', 'quarto.runPreviousCell' }, -- Ctrl+Alt+P
-    { 'n', '<leader>qP', 'quarto.runCellsAbove' }, -- Ctrl+Shift+Alt+P
-    { 'n', '<leader>qN', 'quarto.runCellsBelow' }, -- Ctrl+Shift+Alt+N
-    { 'n', '<leader>qA', 'quarto.runAllCells' }, -- Ctrl+Alt+R
-    { 'n', '<leader>qr', 'quarto.renderDocument' },
+    { 'n', '<leader>rp', 'quarto.preview' }, -- Ctrl+Shift+N
+    { 'n', '<leader>rc', 'quarto.runCurrentCell' }, -- Ctrl+Shift+Enter
+    { 'n', '<leader>rn', 'quarto.runNextCell' }, -- Ctrl+Alt+N
+    { 'n', '<leader>rp', 'quarto.runPreviousCell' }, -- Ctrl+Alt+P
+    { 'n', '<leader>rP', 'quarto.runCellsAbove' }, -- Ctrl+Shift+Alt+P
+    { 'n', '<leader>rN', 'quarto.runCellsBelow' }, -- Ctrl+Shift+Alt+N
+    { 'n', '<leader>ra', 'quarto.runAllCells' }, -- Ctrl+Alt+R
+    { 'n', '<leader>rr', 'quarto.renderDocument' },
   }
 
   for _, mapping in ipairs(mappings) do
@@ -146,6 +178,7 @@ if vim.g.vscode then
       vim.fn.VSCodeNotify(command)
     end, opts)
   end
+
   -- Bootstrap lazy.nvim
   require 'config.lazy-bootstrap'
   -- load ONLY the mini-suite (the table returned by lua/plugins/mini.lua)

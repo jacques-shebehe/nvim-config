@@ -57,10 +57,10 @@ nmap('<leader>bp', '<Cmd>bprevious<CR>', 'Previous buffer')
 nmap('<leader>sv', '<Cmd>vsplit<CR>', 'Split window vertically')
 nmap('<leader>sh', '<Cmd>split<CR>', 'Split window horizontally')
 -- Window resizing with Ctrl + arrows (complements Shift-arrow mappings above)
-nmap('<C-Up>', '<Cmd>resize +2<CR>', 'Increase window height')
-nmap('<C-Down>', '<Cmd>resize -2<CR>', 'Decrease window height')
-nmap('<C-Left>', '<Cmd>vertical resize -2<CR>', 'Decrease window width')
-nmap('<C-Right>', '<Cmd>vertical resize +2<CR>', 'Increase window width')
+-- nmap('<C-Up>', '<Cmd>resize +2<CR>', 'Increase window height')
+-- nmap('<C-Down>', '<Cmd>resize -2<CR>', 'Decrease window height')
+-- nmap('<C-Left>', '<Cmd>vertical resize -2<CR>', 'Decrease window width')
+-- nmap('<C-Right>', '<Cmd>vertical resize +2<CR>', 'Increase window width')
 -- Line joining that keeps cursor position
 nmap('J', 'mzJ`z', 'Join lines and keep cursor position')
 -- Quick config edit
@@ -457,3 +457,33 @@ wk.add({
     { '<leader>xx', ':w<cr>:source %<cr>', desc = '[x] source %' },
   },
 }, { mode = 'n' })
+
+-- Toggle terminal below (no plugin)
+-- Create an augroup and autocmd so terminal buffers start in insert mode
+vim.api.nvim_create_augroup('ToggleTerminal', { clear = true })
+vim.api.nvim_create_autocmd('TermOpen', {
+  group = 'ToggleTerminal',
+  pattern = '*',
+  callback = function()
+    vim.cmd 'startinsert'
+  end,
+})
+
+-- Toggle function
+local function toggle_terminal_below()
+  for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+    -- Use new API to get the buftype option for that buffer
+    local ok, bt = pcall(vim.api.nvim_get_option_value, 'buftype', { buf = buf })
+    if ok and bt == 'terminal' then
+      vim.api.nvim_buf_delete(buf, { force = true })
+      return
+    end
+  end
+
+  -- If no terminal buffer exists, open one in a split at the bottom
+  vim.cmd 'botright split'
+  vim.cmd 'terminal'
+end
+
+-- Keymap + which-key registration
+vim.keymap.set('n', '<leader>t', toggle_terminal_below, { desc = 'Toggle terminal below' })
